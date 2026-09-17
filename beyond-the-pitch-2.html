@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond the Pitch — El camino al fútbol en Europa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0D0B; --ink-2:#10140F; --paper:#F7F6F1; --paper-2:#EFEDE4;
+    --gold:#E8B84B; --grass:#2FAE68; --red:#C1443C;
+    --line-dark:rgba(247,246,241,0.12); --line-light:rgba(10,13,11,0.10);
+    --muted-dark:rgba(247,246,241,0.68); --muted-light:rgba(10,13,11,0.62);
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ font-family:'Work Sans',sans-serif; background:var(--ink); color:var(--paper); line-height:1.62; overflow-x:hidden; }
+  h1,h2,h3,.display{ font-family:'Anton',sans-serif; font-weight:400; line-height:1.08; letter-spacing:0.01em; }
+  a{ color:inherit; } button{ font-family:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+  .wrap{ max-width:1140px; margin:0 auto; padding:0 28px; }
+  section{ position:relative; padding:88px 0; border-bottom:1px solid var(--line-dark); }
+  .light{ background:var(--paper); color:var(--ink); border-bottom:1px solid var(--line-light) !important; }
+  .light .muted{ color:var(--muted-light); }
+  .dark .muted{ color:var(--muted-dark); }
+  .tag{ color:var(--gold); font-weight:800; font-size:0.85rem; letter-spacing:0.03em; margin-bottom:14px; }
+  .light .tag{ color:#B5872C; }
+  .sectitle{ font-size:clamp(1.9rem,4.2vw,2.7rem); margin-bottom:14px; max-width:680px; }
+  .secdesc{ max-width:620px; font-size:1.02rem; }
+  .head{ margin-bottom:40px; }
+  img{ display:block; width:100%; height:100%; object-fit:cover; }
+
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  .imgbox{ overflow:hidden; border-radius:18px; position:relative; }
+  .imgbox img{ transition:transform .5s ease; }
+  .imgbox:hover img{ transform:scale(1.06); }
+  .imgcap{ position:absolute; bottom:0; left:0; right:0; padding:14px 16px; font-size:0.78rem; font-weight:700; color:#fff;
+    background:linear-gradient(0deg, rgba(0,0,0,0.65), transparent); }
+
+  nav{ position:fixed; top:0; left:0; right:0; z-index:200; backdrop-filter:blur(14px); background:rgba(10,13,11,0.6); border-bottom:1px solid var(--line-dark); }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:60px; gap:20px; }
+  .brand{ font-family:'Anton',sans-serif; font-size:1.05rem; letter-spacing:0.02em; white-space:nowrap; }
+  .brand span{ color:var(--gold); }
+  .navscroll{ display:flex; gap:4px; overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; }
+  .navscroll::-webkit-scrollbar{ display:none; }
+  .navscroll button{ padding:8px 13px; border-radius:20px; font-size:0.8rem; font-weight:600; color:var(--muted-dark); white-space:nowrap; transition:.2s; }
+  .navscroll button.active, .navscroll button:hover{ color:var(--paper); background:rgba(247,246,241,0.09); }
+  .burger{ display:none; flex-direction:column; gap:5px; padding:6px; flex-shrink:0; }
+  .burger span{ width:20px; height:2px; background:var(--paper); display:block; }
+  @media (max-width:960px){ .navscroll{ display:none; } .burger{ display:flex; } }
+  .mobile-menu{ display:none; position:fixed; inset:60px 0 0 0; z-index:199; background:var(--ink); padding:14px 28px; flex-direction:column; overflow-y:auto; }
+  .mobile-menu.open{ display:flex; }
+  .mobile-menu button{ text-align:left; padding:15px 4px; font-size:1rem; border-bottom:1px solid var(--line-dark); font-weight:600; }
+
+  .hero{ min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; border-bottom:1px solid var(--line-dark); position:relative; }
+  .hero .bgimg{ position:absolute; inset:0; z-index:0; }
+  .hero .bgimg img{ width:100%; height:100%; object-fit:cover; }
+  .hero .bgimg::after{ content:""; position:absolute; inset:0;
+    background:linear-gradient(0deg, var(--ink) 5%, rgba(10,13,11,0.55) 55%, rgba(10,13,11,0.35) 100%); }
+  .hero .wrap{ position:relative; z-index:1; padding-bottom:70px; padding-top:90px; }
+  .btpTitle{ font-size:clamp(2.6rem,7.5vw,5.2rem); }
+  .btpTitle .accent{ color:var(--grass); }
+  .btpSub{ font-family:'Work Sans'; font-weight:700; font-size:clamp(1rem,2.2vw,1.3rem); color:var(--gold); margin-top:8px; }
+  .hero .motiv{ margin-top:22px; max-width:540px; font-size:1.08rem; color:#fff; font-style:italic; }
+  .hero .intro-p{ margin-top:16px; max-width:580px; font-size:0.98rem; color:var(--muted-dark); }
+  .hero .ctas{ margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn-primary{ background:var(--gold); color:var(--ink); font-weight:800; padding:15px 28px; border-radius:30px; font-size:0.96rem; transition:transform .15s; }
+  .btn-primary:hover{ transform:translateY(-2px); }
+  .btn-ghost{ border:1px solid rgba(255,255,255,0.35); padding:15px 28px; border-radius:30px; font-size:0.96rem; font-weight:600; transition:background .2s; }
+  .btn-ghost:hover{ background:rgba(247,246,241,0.1); }
+  .scrollcue{ position:absolute; bottom:24px; left:28px; z-index:1; font-size:0.78rem; color:var(--muted-dark); display:flex; align-items:center; gap:10px; }
+  .scrollcue .line{ width:1px; height:32px; background:var(--line-dark); position:relative; overflow:hidden; }
+  .scrollcue .line::after{ content:""; position:absolute; top:0; left:0; width:100%; height:40%; background:var(--gold); animation:scrolldown 1.8s ease-in-out infinite; }
+  @keyframes scrolldown{ 0%{transform:translateY(-100%);} 100%{transform:translateY(250%);} }
+
+  .factorgrid{ display:grid; grid-template-columns:repeat(7,1fr); gap:0; margin-top:36px; border-top:1px solid var(--line-light); }
+  .factor{ padding:20px 8px; text-align:center; border-right:1px solid var(--line-light); font-size:0.82rem; font-weight:700; }
+  .factor:last-child{ border-right:none; }
+  @media (max-width:900px){ .factorgrid{ grid-template-columns:repeat(4,1fr); } .factor{ border-bottom:1px solid var(--line-light);} }
+  @media (max-width:560px){ .factorgrid{ grid-template-columns:repeat(2,1fr); } }
+
+  .statgrid{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--line-light); }
+  .stat{ padding:32px 18px; text-align:center; border-right:1px solid var(--line-light); }
+  .stat:last-child{ border-right:none; }
+  .stat .num{ font-size:2.6rem; }
+  .stat .num .suffix{ color:var(--grass); }
+  .stat .label{ font-size:0.8rem; color:var(--muted-light); margin-top:6px; max-width:180px; margin-inline:auto; }
+  @media (max-width:760px){ .statgrid{ grid-template-columns:1fr 1fr;} .stat{ border-bottom:1px solid var(--line-light);} }
+
+  .imgtext{ display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
+  @media (max-width:820px){ .imgtext{ grid-template-columns:1fr; gap:26px; } }
+  .imgtext .imgbox{ aspect-ratio:4/3; }
+  .callout{ border-left:3px solid var(--gold); background:rgba(232,184,75,0.08); padding:15px 18px; margin-top:16px; max-width:500px; font-size:0.92rem; border-radius:0 10px 10px 0; }
+  .callout b{ color:var(--gold); }
+  .light .callout b{ color:#B5872C; }
+  .srcline{ margin-top:12px; font-size:0.78rem; color:var(--muted-dark); }
+  .light .srcline{ color:var(--muted-light); }
+  .minilist{ margin-top:14px; padding-left:0; list-style:none; }
+  .minilist li{ font-size:0.92rem; margin-bottom:7px; padding-left:20px; position:relative; }
+  .minilist li::before{ content:"⚽"; position:absolute; left:0; font-size:0.7rem; top:3px; }
+
+  .fgrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:760px){ .fgrid{ grid-template-columns:1fr; } }
+  .fitem{ border:1px solid var(--line-dark); border-radius:14px; overflow:hidden; }
+  .light .fitem{ border-color:var(--line-light); }
+  .fq{ width:100%; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:16px 18px; text-align:left; font-weight:700; font-size:0.95rem; }
+  .fq .plus{ color:var(--gold); font-size:1.3rem; flex-shrink:0; transition:transform .25s; }
+  .fitem.open .plus{ transform:rotate(45deg); }
+  .fa{ max-height:0; overflow:hidden; transition:max-height .35s ease; }
+  .fitem.open .fa{ max-height:260px; }
+  .fa-in{ padding:0 18px 18px; font-size:0.9rem; color:var(--muted-dark); }
+  .light .fa-in{ color:var(--muted-light); }
+
+  .slider{ margin-top:10px; }
+  .slidewrap{ display:grid; grid-template-columns: 1fr 1fr; gap:40px; align-items:center; }
+  @media (max-width:820px){ .slidewrap{ grid-template-columns:1fr; } }
+  .slidewrap .imgbox{ aspect-ratio:4/3; }
+  .slidetrack{ display:flex; transition:transform .5s cubic-bezier(.65,0,.35,1); }
+  .slide{ min-width:100%; }
+  .slide .n{ font-family:'Anton'; font-size:2.8rem; color:transparent; -webkit-text-stroke:1.5px var(--line-light); }
+  .slide h4{ font-weight:800; font-size:1.25rem; margin-bottom:8px; }
+  .slide p{ color:var(--muted-light); max-width:520px; font-size:0.95rem; }
+  .slider-controls{ display:flex; align-items:center; gap:16px; margin-top:26px; }
+  .slider-controls button{ width:42px; height:42px; border-radius:50%; border:1px solid var(--line-light); display:flex; align-items:center; justify-content:center; }
+  .dots{ display:flex; gap:8px; }
+  .dot{ width:8px; height:8px; border-radius:50%; background:var(--line-light); transition:.25s; }
+  .dot.active{ background:var(--ink); width:22px; border-radius:5px; }
+
+  .quote-section{ text-align:center; background:linear-gradient(180deg,var(--ink) 0%, var(--ink-2) 100%); }
+  .quote-section p{ max-width:640px; margin:0 auto; color:var(--muted-dark); font-size:1.02rem; }
+
+  .keepgrid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media (max-width:900px){ .keepgrid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .keepgrid{ grid-template-columns:1fr; } }
+  .keepcard{ border:1px solid var(--line-dark); border-radius:16px; padding:20px; }
+  .keepcard .num{ color:var(--gold); font-size:0.78rem; font-weight:800; margin-bottom:8px; }
+  .keepcard h4{ font-weight:800; font-size:0.98rem; margin-bottom:6px; }
+  .keepcard p{ font-size:0.86rem; color:var(--muted-dark); }
+
+  .widget{ border-radius:20px; padding:28px; border:1px solid rgba(232,184,75,0.3); background:rgba(232,184,75,0.10); max-width:620px; }
+  .widget .wtag{ font-size:0.76rem; font-weight:800; letter-spacing:0.03em; margin-bottom:10px; color:var(--gold); }
+  .widget h4{ font-size:1.15rem; margin-bottom:8px; font-weight:800; font-family:'Work Sans'; }
+  .widget button{ margin-top:14px; font-size:0.8rem; font-weight:800; text-decoration:underline; color:var(--gold); }
+
+  .quizbox{ max-width:640px; margin:0 auto; border:1px solid var(--line-dark); border-radius:20px; padding:34px; }
+  .qbar{ height:4px; background:var(--line-dark); border-radius:2px; margin-bottom:26px; overflow:hidden; }
+  .qbar-fill{ height:100%; background:var(--gold); width:0%; transition:width .3s ease; }
+  .qtext{ font-size:1.15rem; font-weight:700; margin-bottom:20px; }
+  .qopts{ display:flex; flex-direction:column; gap:10px; }
+  .qopt{ border:1px solid var(--line-dark); border-radius:12px; padding:13px 18px; text-align:left; font-size:0.94rem; transition:.2s; }
+  .qopt:hover{ background:rgba(247,246,241,0.06); border-color:var(--gold); }
+  .qresult{ display:none; text-align:center; }
+  .qresult.show{ display:block; }
+  .qresult .qnum{ font-family:'Anton'; font-size:2.4rem; margin-bottom:6px; }
+  .qresult h4{ font-size:1.25rem; margin-bottom:10px; }
+  .qresult p{ color:var(--muted-dark); font-size:0.92rem; margin-bottom:18px; }
+  .qretry{ border:1px solid var(--line-dark); padding:10px 20px; border-radius:24px; font-weight:700; font-size:0.82rem; }
+
+  .faqlist{ max-width:780px; margin:0 auto; }
+  .faqitem{ border-bottom:1px solid var(--line-dark); }
+  .faqq{ width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; padding:20px 4px; text-align:left; font-size:1rem; font-weight:700; }
+  .faqq .plus{ font-size:1.3rem; color:var(--gold); transition:transform .25s; flex-shrink:0; }
+  .faqitem.open .plus{ transform:rotate(45deg); }
+  .faqa{ max-height:0; overflow:hidden; transition:max-height .35s ease, padding .35s ease; padding:0 4px; }
+  .faqitem.open .faqa{ max-height:220px; padding-bottom:18px; }
+  .faqa p{ color:var(--muted-dark); font-size:0.92rem; max-width:640px; }
+
+  .fbgrid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:start; }
+  @media (max-width:820px){ .fbgrid{ grid-template-columns:1fr;} }
+  .satisfaction{ display:flex; gap:10px; margin:18px 0 20px; flex-wrap:wrap; }
+  .satbtn{ border:1px solid var(--line-light); padding:11px 18px; border-radius:24px; font-weight:700; font-size:0.88rem; transition:.2s; }
+  .satbtn.sel{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .fbform{ display:flex; flex-direction:column; gap:14px; }
+  .fbform textarea{ width:100%; border:1px solid var(--line-light); background:var(--paper); color:var(--ink); padding:13px 16px; border-radius:12px; font-family:inherit; font-size:0.92rem; min-height:96px; resize:vertical; }
+  .fbform button{ align-self:flex-start; background:var(--ink); color:var(--paper); font-weight:800; padding:13px 24px; border-radius:30px; font-size:0.92rem; transition:transform .15s; }
+  .fbform button:hover{ transform:translateY(-2px); }
+  .fbthanks{ display:none; border:1px solid var(--grass); background:rgba(47,174,104,0.08); padding:15px 18px; border-radius:12px; font-size:0.92rem; }
+  .fbthanks.show{ display:block; }
+
+  .srctable{ display:flex; flex-direction:column; gap:12px; }
+  .srcrow{ border:1px solid var(--line-dark); border-radius:14px; padding:16px 20px; display:grid; grid-template-columns:220px 1fr; gap:14px; }
+  @media (max-width:700px){ .srcrow{ grid-template-columns:1fr; } }
+  .srcrow .name{ font-weight:800; font-size:0.9rem; }
+  .srcrow .what{ font-size:0.86rem; color:var(--muted-dark); }
+
+  footer{ padding:60px 0 40px; border-bottom:none; }
+  .footTop{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; margin-bottom:36px; }
+  footer .brandbig{ font-family:'Anton'; font-size:1.5rem; }
+  footer .brandbig span{ color:var(--gold); }
+  footer .footsub{ color:var(--muted-dark); font-size:0.88rem; margin-top:6px; }
+  .footlinks{ display:flex; gap:34px; flex-wrap:wrap; }
+  .footlinks div b{ display:block; margin-bottom:10px; color:var(--gold); font-size:0.8rem; }
+  .footlinks div a{ display:block; font-size:0.84rem; color:var(--muted-dark); margin-bottom:6px; }
+  .footbottom{ border-top:1px solid var(--line-dark); padding-top:20px; font-size:0.78rem; color:var(--muted-dark); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">BEYOND<span>PITCH</span></div>
+    <div class="navscroll" id="navlinks">
+      <button data-target="fisico">Entrena mejor</button>
+      <button data-target="casa">Sin gimnasio</button>
+      <button data-target="tecnica">Mejora tu juego</button>
+      <button data-target="mental">Cuida tu mente</button>
+      <button data-target="comida">Come bien</button>
+      <button data-target="descanso">Descansa bien</button>
+      <button data-target="camino">Camino pro</button>
+      <button data-target="adaptacion">Lejos de casa</button>
+      <button data-target="mantenerse">Sigue mejorando</button>
+      <button data-target="quiz">Cuestionario</button>
+      <button data-target="faq">Preguntas</button>
+      <button data-target="fuentes">Fuentes</button>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button data-target="fisico">Entrena mejor</button>
+  <button data-target="casa">Sin gimnasio</button>
+  <button data-target="tecnica">Mejora tu juego</button>
+  <button data-target="mental">Cuida tu mente</button>
+  <button data-target="comida">Come bien</button>
+  <button data-target="descanso">Descansa bien</button>
+  <button data-target="camino">Camino pro</button>
+  <button data-target="adaptacion">Lejos de casa</button>
+  <button data-target="mantenerse">Sigue mejorando</button>
+  <button data-target="reto">Consejo del día</button>
+  <button data-target="quiz">Cuestionario</button>
+  <button data-target="faq">Preguntas</button>
+  <button data-target="feedback">Opina</button>
+  <button data-target="fuentes">Fuentes</button>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="inicio">
+  <div class="bgimg"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vietnam_Youth_Football_Training_Center_2022.jpg" alt="Jóvenes entrenando fútbol"></div>
+  <div class="wrap">
+    <div class="tag reveal">Proyecto personal · Thiago Mosquera</div>
+    <h1 class="btpTitle reveal">Beyond <span class="accent">the Pitch</span></h1>
+    <div class="btpSub reveal">El camino al fútbol en Europa</div>
+    <p class="motiv reveal">"El talento te ayuda, pero el talento es lo que te hace llegar."</p>
+    <p class="intro-p reveal">Esta página tiene información real sobre lo que necesita un futbolista joven: cuerpo, técnica, cabeza y buenos hábitos.</p>
+    <div class="ctas reveal">
+      <button class="btn-primary" data-target="quiz">Descubre tu camino</button>
+      <button class="btn-ghost" data-target="fisico">Ver la guía</button>
+    </div>
+  </div>
+  <div class="scrollcue"><div class="line"></div> Baja para ver más</div>
+</header>
+
+<!-- POR QUE HICE ESTA PAGINA -->
+<section class="light">
+  <div class="wrap">
+    <div class="tag reveal">Por qué hice esta página</div>
+    <p class="secdesc muted reveal" style="font-size:1.08rem; max-width:680px;">Hice esta página porque me gusta el fútbol y también ayudar a los demás a lograr sus objetivos, y con esta página siento que doy una gran ayuda. Mientras investigaba me di cuenta de que hay mucha información muy valiosa, pero no es tan fácil de encontrar, y un joven que entrena y estudia tampoco tiene mucho tiempo. Con esto les facilito el trabajo, y lo pueden tener desde su celular, computador, tablet, etc.</p>
+  </div>
+</section>
+
+<!-- NO ES SOLO TALENTO -->
+<section class="light">
+  <div class="wrap">
+    <div class="tag reveal">Antes de empezar</div>
+    <h2 class="sectitle reveal">No es solo talento</h2>
+    <p class="secdesc muted reveal">Un futbolista bueno no se hace solo jugando partidos, sino que tiene que tener disciplina, mentalidad y otras cosas. La UEFA y la FIFA dicen algo muy parecido en sus programas: un jugador crece en varios aspectos al mismo tiempo.</p>
+    <div class="factorgrid reveal">
+      <div class="factor">Físico</div>
+      <div class="factor">Técnica</div>
+      <div class="factor">Mente</div>
+      <div class="factor">Comida</div>
+      <div class="factor">Descanso</div>
+      <div class="factor">Disciplina</div>
+      <div class="factor">Adaptación</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="light">
+  <div class="wrap">
+    <div class="statgrid reveal">
+      <div class="stat"><div class="num"><span class="count" data-target="51">0</span><span class="suffix">%</span></div><div class="label">menos lesiones haciendo el ejercicio nordic curl</div></div>
+      <div class="stat"><div class="num"><span class="count" data-target="60">0</span><span class="suffix">%</span></div><div class="label">menos lesiones en jóvenes que duermen más de 8 horas</div></div>
+      <div class="stat"><div class="num"><span class="count" data-target="66">0</span><span class="suffix">%</span></div><div class="label">de futbolistas brasileños que se devolvieron antes del año jugando afuera</div></div>
+      <div class="stat"><div class="num"><span class="count" data-target="23">0</span></div><div class="label">títulos juveniles ganados por España en 10 años</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ENTRENA MEJOR -->
+<section class="dark" id="fisico">
+  <div class="wrap">
+    <div class="head">
+      <div class="tag reveal">01</div>
+      <h2 class="sectitle reveal">Entrena mejor para llegar</h2>
+      <p class="secdesc muted reveal">El cuerpo es la base de todo. Y no, no es solo correr.</p>
+    </div>
+    <div class="imgtext reveal" style="margin-bottom:34px;">
+      <div class="imgbox"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Young_attractive_man_athlete_doing_exercise_with_the_barbell_in_the_gym.jpg" alt="Jugador entrenando fuerza en el gimnasio"><div class="imgcap">Fuerza en una sola pierna</div></div>
+      <div>
+        <p class="secdesc muted">Casi ningún jugador de fútbol amateur tiene la misma fuerza en las dos piernas. Por eso se entrena mucho la fuerza de una sola pierna, con ejercicios como la sentadilla búlgara. También existe otro ejercicio no tan conocido, con nombre raro, el nordic hamstring curl, que baja el riesgo de romperte el isquiotibial casi a la mitad. Eso es muy importante, porque ningún jugador quiere que su mejor versión se lesione.</p>
+        <div class="callout"><b>Sin gimnasio:</b> sentadillas de una pierna, saltos y el nordic curl te ayudan mucho. También puedes hacer pliometría en casa, que es muy importante para reaccionar, saltar y ganar velocidad.</div>
+      </div>
+    </div>
+    <div class="fgrid reveal">
+      <div class="fitem open"><button class="fq"><span>Fuerza</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Te ayuda a ganar los choques y los saltos sin caerte.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Velocidad</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Arrancar rápido en pocos metros es muy útil. Se entrena con sprints cortos, no corriendo largo.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Resistencia</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Es aguantar el ritmo de todo el partido sin cansarse. Se entrena trotando o con partidos cortos.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Potencia</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Es movimiento rápido, como un sprint, un salto o un remate. Se entrena con saltos y ejercicios cortos.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Agilidad</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Cambiar de dirección rápido. Se entrena con conos y escaleras de fútbol.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Movilidad</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Un cuerpo que se mueve con tranquilidad disfruta y juega mejor. Se trabaja con estiramientos antes de entrenar.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Coordinación</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Es la conexión de tu cuerpo contigo mismo, y con qué frecuencia haces los movimientos.</div></div></div>
+    </div>
+    <div class="srcline reveal" style="margin-top:20px;">Fuentes de esta sección: Barça Innovation Hub, FIFA — Manual de formación juvenil.</div>
+  </div>
+</section>
+
+<!-- SIN GIMNASIO -->
+<section class="light" id="casa">
+  <div class="wrap">
+    <div class="head">
+      <div class="tag reveal">02</div>
+      <h2 class="sectitle reveal">No necesitas gimnasio ni pagar para mejorar</h2>
+      <p class="secdesc muted reveal">Mucha gente cree que sin equipo no se puede entrenar bien. Eso es mentira. Con tu propio peso o una pared, puedes trabajar muchas cosas.</p>
+    </div>
+    <ul class="minilist reveal" style="max-width:560px;">
+      <li>Sentadillas a una pierna — para la fuerza de cada pierna por separado.</li>
+      <li>Saltos cortos (adelante, atrás, a los lados) — para potencia y agilidad.</li>
+      <li>Plancha y abdominales — para el centro del cuerpo, que ayuda en los choques.</li>
+      <li>Carreras cortas — para velocidad.</li>
+      <li>Toques de balón contra una pared — para control y primer toque, con eso mejoras mucho la técnica.</li>
+    </ul>
+    <div class="callout reveal"><b>Consejo:</b> no te sobre-exijas. Elige 3 o 4 ejercicios y hazlos bien, porque si haces todos a la vez, en vez de mejorar te puedes lesionar, y eso no queremos.</div>
+  </div>
+</section>
+
+<!-- MEJORA TU JUEGO -->
+<section class="dark" id="tecnica">
+  <div class="wrap">
+    <div class="head">
+      <div class="tag reveal">03</div>
+      <h2 class="sectitle reveal">Mejora tu juego con el balón</h2>
+    </div>
+    <div class="imgbox reveal" style="aspect-ratio:16/6; margin-bottom:30px;"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/People_Playing_football.jpg" alt="Jugadores en un partido"></div>
+    <div class="fgrid reveal">
+      <div class="fitem open"><button class="fq"><span>Control y primer toque</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Recibir el balón y entregarlo en un toque. Es lo primero que enseñan las academias, y es muy importante para jugar rápido.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Pase</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Depende de la fuerza y de cómo le das el balón a tu compañero. Tienes que visualizar a qué pie y cómo está acomodado.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Tiro</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">A veces es mejor tirar suave pero colocado, que muy duro sin dirección.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Regate y conducción</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Cambiar de ritmo con el balón deja perdido a los demás.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Jugar con las dos piernas</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Si dominas las dos piernas puedes hacer todo con ellas, algo que no todos tienen.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Decidir rápido</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Saber qué hacer con el balón en un segundo.</div></div></div>
+      <div class="fitem"><button class="fq"><span>Estar en el lugar correcto</span><span class="plus">+</span></button><div class="fa"><div class="fa-in">Hacer movimientos sin el balón también es muy importante para tocar más el balón y ser más efectivo.</div></div></div>
+    </div>
+    <div class="srcline reveal" style="margin-top:20px;">Fuentes de esta sección: FIFA — Manual de formación juvenil, UEFA — Academias de élite, guía de formación juvenil (basada en metodologías de RFEF y KNVB).</div>
+  </div>
+</section>
+
+<!-- CUIDA TU MENTE -->
+<section class="light" id="mental">
+  <div class="wrap imgtext">
+    <div class="imgbox reveal"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Stretching_before_marathon_at_the_sports_day_of_the_youth_group_in_Taihoku.jpg" alt="Jugador concentrándose antes de competir"><div class="imgcap">Concentrarse antes de jugar</div></div>
+    <div class="reveal">
+      <div class="tag">04</div>
+      <h2 class="sectitle" style="font-size:1.9rem;">Cuida tu mente</h2>
+      <p class="secdesc muted">En el fútbol no es solo cómo juegas con los pies, sino cómo eres con la cabeza. Casi todo en internet dice que lo importante es la confianza, la concentración y saber controlar tus nervios. Algunos tips: imaginarte la jugada antes de recibir el balón, y respirar antes del partido, ayuda a bajar los nervios.</p>
+      <p class="secdesc muted">Hubo un estudio con 19 jugadores de 16 años que aprendieron técnicas de concentración, y manejaban mejor el estrés y jugaban mejor.</p>
+      <ul class="minilist">
+        <li><b>Antes de un partido:</b> respira lento, imagina tu partido como que todo te sale bien.</li>
+        <li><b>Después de un error:</b> no te quedes estancado si te equivocaste en una jugada. No pienses mucho, y visualiza en qué te equivocaste y qué vas a hacer en la siguiente jugada.</li>
+        <li><b>Para la confianza:</b> puedes poner videos que tengas de ti jugando bien, como goles, barridas, pases, etc.</li>
+        <li><b>Para la disciplina:</b> lo más importante para llegar es tener mucha disciplina. No importa si no quieres ir a entrenar, si estás cansado, etc. Tienes que entrenar.</li>
+      </ul>
+      <div class="srcline">Fuentes: Storelli — Habilidades mentales en el fútbol, estudio de Moreno-Fernández y otros (2019).</div>
+    </div>
+  </div>
+</section>
+
+<!-- COME BIEN -->
+<section class="dark" id="comida">
+  <div class="wrap imgtext">
+    <div class="reveal">
+      <div class="tag">05</div>
+      <h2 class="sectitle" style="font-size:1.9rem;">Come bien, juega mejor</h2>
+      <p class="secdesc muted">No necesitas dietas estrictas, solo comer las calorías necesarias para tu cuerpo: proteína, carbohidratos y vegetales, y no comer comida chatarra. Recuerda que esto puede influir en una lesión.</p>
+      <ul class="minilist">
+        <li>Arroz, pasta y pan te dan energía para jugar.</li>
+        <li>La proteína ayuda a recuperar los músculos.</li>
+        <li>Calcio, vitamina D y hierro son claves.</li>
+        <li>Toma agua: entre 400 y 600 ml, dos horas antes de jugar.</li>
+      </ul>
+      <p class="secdesc muted" style="margin-top:14px;">La UEFA dice que primero va la comida de verdad, y luego, si tomas suplementos, que sea porque los necesitas, no por verte "cool" o algo así.</p>
+      <div class="callout"><b>Consejo:</b> en cada comida, un poco de carbohidrato, un poco de proteína, y fruta o verdura.</div>
+      <div class="srcline">Fuentes: KidsHealth / Nemours, Barça Innovation Hub (cita a la UEFA).</div>
+    </div>
+    <div class="imgbox reveal"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Healthy_breakfast_choices_enjoyed_after_a_workout_on_a_yoga_mat_in_a_cozy_indoor_space.jpg" alt="Comida saludable después de entrenar"><div class="imgcap">Comer bien después de entrenar</div></div>
+  </div>
+</section>
+
+<!-- DESCANSA BIEN -->
+<section class="light" id="descanso">
+  <div class="wrap imgtext">
+    <div class="imgbox reveal"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Estadio_Santiago_Bernabeu_(53988637843).jpg" alt="Estadio en calma"><div class="imgcap">El descanso también es parte del juego</div></div>
+    <div class="reveal">
+      <div class="tag">06</div>
+      <h2 class="sectitle" style="font-size:1.9rem;">Descansa bien</h2>
+      <p class="secdesc muted">Dormir bien es muy importante, más que todo antes de un partido o una prueba. Un estudio de jóvenes futbolistas encontró que los que dormían más de 8 horas se lesionaban casi un 60% menos que los que dormían poco.</p>
+      <p class="secdesc muted">Mientras duermes, el cuerpo se regenera. Dormir mal te deja sin concentración y sin energía. Si no dormiste muy bien, un sueño de 30 a 40 minutos ayuda un poco, pero no reemplaza dormir bien de verdad.</p>
+      <div class="srcline">Fuente: Barça Innovation Hub — El sueño y el rendimiento del deportista.</div>
+    </div>
+  </div>
+</section>
+
+<!-- EL CAMINO AL FUTBOL PROFESIONAL -->
+<section class="dark" id="camino">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="tag">07</div>
+      <h2 class="sectitle">El camino al fútbol profesional</h2>
+    </div>
+    <div class="slider reveal">
+      <div class="slidewrap">
+        <div class="imgbox"><img id="slideImg" src="https://commons.wikimedia.org/wiki/Special:FilePath/Vietnam_Youth_Football_Training_Center_2022.jpg" alt="Paso del camino profesional"></div>
+        <div>
+          <div class="slidetrack" id="slideTrack">
+            <div class="slide"><div class="n">01</div><h4>Fútbol base</h4><p>Todo inicia desde acá. Acá juegas más que todo por divertirte o por hobbie, no lo ves como un proyecto a futuro, y normalmente juegas en un club-escuela de barrio.</p></div>
+            <div class="slide"><div class="n">02</div><h4>Ojeadores (scouting)</h4><p>Gente de los clubes va a ver ligas y torneos buscando jugadores con potencial. Acá ya debes estar más grande y usualmente en un club conocido.</p></div>
+            <div class="slide"><div class="n">03</div><h4>Pruebas</h4><p>Son días donde los entrenadores ven tu juego, para que quedes en un equipo profesional o con otro objetivo.</p></div>
+            <div class="slide"><div class="n">04</div><h4>Academias afuera</h4><p>En España, más que todo, hay escuelas donde estudias, comes y duermes allá, y lo más importante es el fútbol.</p></div>
+            <div class="slide"><div class="n">05</div><h4>Seguir aunque no entres ya</h4><p>Si no quedaste en el equipo profesional, sigue con el deporte con disciplina. Se te abrirá una oportunidad.</p></div>
+          </div>
+          <div class="slider-controls">
+            <button id="prevSlide" aria-label="Anterior"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+            <div class="dots" id="dots"></div>
+            <button id="nextSlide" aria-label="Siguiente"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEJOS DE CASA -->
+<section class="dark quote-section" id="adaptacion">
+  <div class="wrap">
+    <div class="tag reveal" style="justify-content:center; display:flex;">08 · Lejos de casa</div>
+    <h3 class="reveal" style="font-size:clamp(1.3rem,2.6vw,1.8rem); max-width:700px; margin:14px auto 16px;">De más de mil futbolistas brasileños que se fueron a jugar afuera en 2010, más de 600 se devolvieron a su país natal.</h3>
+    <p class="reveal">No fue porque jugaran mal, sino porque no se adaptaron a su nueva cultura. Porque tienes que dejar familia, comida, costumbres, etc.</p>
+    <ul class="minilist reveal" style="text-align:left; max-width:480px; margin-inline:auto; margin-top:20px;">
+      <li>Aprender frases básicas del idioma antes de viajar.</li>
+      <li>Hablar con jugadores que ya hayan tenido esa experiencia.</li>
+      <li>Mantener contacto con tu familia, sin aislarte del nuevo equipo.</li>
+      <li>Aceptar que los primeros meses son los más difíciles, y que mejora con el tiempo.</li>
+    </ul>
+    <div class="srcline reveal" style="margin-top:18px;">Fuentes: SIFUP, FIFPRO.</div>
+  </div>
+</section>
+
+<!-- SIGUE MEJORANDO -->
+<section class="light" id="mantenerse">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="tag">09</div>
+      <h2 class="sectitle">Sigue mejorando</h2>
+    </div>
+    <div class="keepgrid reveal">
+      <div class="keepcard"><div class="num">01</div><h4>Disciplina diaria</h4><p>Dormir bien, comer bien, llegar a tiempo. Todos los días, no solo cuando quieres.</p></div>
+      <div class="keepcard"><div class="num">02</div><h4>Cuida tu cuerpo</h4><p>Las lesiones son la razón por la que a veces pierdes tu puesto y tu rendimiento.</p></div>
+      <div class="keepcard"><div class="num">03</div><h4>Mente fuerte</h4><p>Cada vez que estás más cerca de llegar, es mayor la presión. Tienes que saber manejarla.</p></div>
+      <div class="keepcard"><div class="num">04</div><h4>Nuevos entrenadores</h4><p>En el fútbol se cambia mucho de entrenador. Tienes que saber adaptarte a la metodología de cada uno.</p></div>
+    </div>
+    <div class="srcline reveal" style="margin-top:26px;">Fuentes: Soccer Interaction, UEFA — Academias de élite.</div>
+  </div>
+</section>
+
+<!-- CONSEJO DEL DIA -->
+<section class="dark" id="reto">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="tag">Cada día</div>
+      <h2 class="sectitle" style="font-size:1.8rem;">Consejo del día</h2>
+    </div>
+    <div class="widget reveal">
+      <div class="wtag">💡 CONSEJO DEL DÍA</div>
+      <h4 id="tipText">Cargando...</h4>
+      <button id="newTip">Ver otro consejo →</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section class="light" id="quiz">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="tag">Descubre tu camino</div>
+      <h2 class="sectitle">¿Qué deberías trabajar más?</h2>
+    </div>
+    <div class="quizbox reveal">
+      <div class="qbar"><div class="qbar-fill" id="qbarFill"></div></div>
+      <div id="quizQuestion">
+        <div class="qtext" id="qtext"></div>
+        <div class="qopts" id="qopts"></div>
+      </div>
+      <div class="qresult" id="qresult">
+        <div class="qnum" id="qResultIcon">💪</div>
+        <h4 id="qResultTitle"></h4>
+        <p id="qResultText"></p>
+        <button class="qretry" id="qRetry">Repetir</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="dark" id="faq">
+  <div class="wrap">
+    <div class="head reveal" style="text-align:center; margin-inline:auto;">
+      <div class="tag">Preguntas frecuentes</div>
+      <h2 class="sectitle" style="margin-inline:auto;">Lo que más preguntan</h2>
+    </div>
+    <div class="faqlist reveal" id="faqlist">
+      <div class="faqitem"><button class="faqq"><span>¿Qué hago si no tengo gimnasio?</span><span class="plus">+</span></button><div class="faqa"><p>Sentadillas de una pierna, saltos y carreras cortas en la cancha del barrio hacen casi lo mismo que una máquina.</p></div></div>
+      <div class="faqitem"><button class="faqq"><span>¿Si sigo esto voy a ser profesional?</span><span class="plus">+</span></button><div class="faqa"><p>No. Llegar a profesional es difícil incluso preparándote bien. Esta guía te da mejores herramientas, no una garantía.</p></div></div>
+      <div class="faqitem"><button class="faqq"><span>¿A qué edad ya es muy tarde para seguir jugando?</span><span class="plus">+</span></button><div class="faqa"><p>No hay una edad exacta. La categoría Juvenil (16-18) suele ser la última etapa de formación, así que mientras antes empieces, mejor.</p></div></div>
+      <div class="faqitem"><button class="faqq"><span>¿Qué hago si se me baja la motivación?</span><span class="plus">+</span></button><div class="faqa"><p>Le pasa a todos, incluso a los profesionales. Lo que importa es seguir la rutina, aunque sea a medias.</p></div></div>
+      <div class="faqitem"><button class="faqq"><span>¿El fútbol femenino es el mismo proceso que el masculino?</span><span class="plus">+</span></button><div class="faqa"><p>Sí. Las pruebas, academias y toda la preparación aplican igual para jugadoras.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OPINA -->
+<section class="light" id="feedback">
+  <div class="wrap fbgrid">
+    <div class="reveal">
+      <div class="tag">Opina</div>
+      <h2 class="sectitle" style="font-size:1.8rem;">¿Qué te pareció la página?</h2>
+      <p class="secdesc muted">Este proyecto tiene muchas cosas por mejorar. Escribe qué te agradó y qué no.</p>
+      <div class="satisfaction" id="satisfaction">
+        <button class="satbtn" data-val="Muy buena">Muy buena</button>
+        <button class="satbtn" data-val="Buena">Buena</button>
+        <button class="satbtn" data-val="Regular">Regular</button>
+      </div>
+    </div>
+    <div class="reveal">
+      <form class="fbform" id="fbForm">
+        <textarea placeholder="¿Qué le agregarías?" required></textarea>
+        <button type="submit">Enviar</button>
+      </form>
+      <div class="fbthanks" id="fbThanks">¡Gracias! Tu opinión quedó guardada para mejorar el proyecto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FUENTES -->
+<section class="dark" id="fuentes">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="tag">Investigación</div>
+      <h2 class="sectitle">Fuentes e investigación</h2>
+    </div>
+    <div class="srctable reveal">
+      <div class="srcrow"><div class="name">UEFA — Academias de élite juvenil</div><div class="what">Cómo se forman los jóvenes en las 55 federaciones de Europa.</div></div>
+      <div class="srcrow"><div class="name">FIFA — Manual de formación juvenil</div><div class="what">Base de físico y técnica.</div></div>
+      <div class="srcrow"><div class="name">Barça Innovation Hub — Entrenamiento físico</div><div class="what">Fuerza en una pierna, potencia, movilidad, recuperación.</div></div>
+      <div class="srcrow"><div class="name">Barça Innovation Hub — Nordic curl</div><div class="what">El dato del 51% menos lesiones.</div></div>
+      <div class="srcrow"><div class="name">Barça Innovation Hub — Nutrición</div><div class="what">Cita a la UEFA, hidratación y comida antes que suplementos.</div></div>
+      <div class="srcrow"><div class="name">Storelli — Mente en el fútbol</div><div class="what">Confianza, concentración, control emocional.</div></div>
+      <div class="srcrow"><div class="name">Moreno-Fernández y otros (2019)</div><div class="what">Estudio con 19 jugadores jóvenes.</div></div>
+      <div class="srcrow"><div class="name">KidsHealth / Nemours</div><div class="what">Alimentación para adolescentes.</div></div>
+      <div class="srcrow"><div class="name">SIFUP — Migrar para jugar</div><div class="what">El dato del 66% y el "duelo migratorio".</div></div>
+      <div class="srcrow"><div class="name">FIFPRO</div><div class="what">Choque cultural dentro del equipo.</div></div>
+      <div class="srcrow"><div class="name">SIA Academy</div><div class="what">Los 2.500 profesionales en España y el 1% de probabilidad.</div></div>
+      <div class="srcrow"><div class="name">Soccer Interaction</div><div class="what">Disciplina y cómo mantenerse.</div></div>
+      <div class="srcrow"><div class="name">Coach OS</div><div class="what">Ligas juveniles de España e Inglaterra.</div></div>
+      <div class="srcrow"><div class="name">Goal.com / LaLiga</div><div class="what">Tabla de títulos por país.</div></div>
+      <div class="srcrow"><div class="name">Mediotiempo</div><div class="what">Modelos de formación de Francia e Inglaterra.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="dark">
+  <div class="wrap">
+    <div class="footTop">
+      <div>
+        <div class="brandbig">BEYOND <span>THE PITCH</span></div>
+        <div class="footsub">El camino al fútbol en Europa</div>
+        <div class="footsub">Proyecto Personal · Autor: Thiago Mosquera</div>
+      </div>
+      <div class="footlinks">
+        <div><b>Secciones</b><a href="#fisico">Entrena mejor</a><a href="#tecnica">Mejora tu juego</a><a href="#mental">Cuida tu mente</a><a href="#camino">Camino pro</a></div>
+        <div><b>Más</b><a href="#quiz">Cuestionario</a><a href="#faq">Preguntas</a><a href="#fuentes">Fuentes</a></div>
+      </div>
+    </div>
+    <div class="footbottom">
+      <span>Beyond the Pitch — Proyecto Personal escolar</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('[data-target]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const t = document.getElementById(btn.dataset.target);
+      if(t) t.scrollIntoView({behavior:'smooth'});
+      document.getElementById('mobileMenu').classList.remove('open');
+    });
+  });
+  const spySections = ['fisico','casa','tecnica','mental','comida','descanso','camino','adaptacion','mantenerse','quiz','faq','fuentes']
+    .map(id=>document.getElementById(id));
+  const navBtns = document.querySelectorAll('#navlinks button');
+  const spy = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ navBtns.forEach(b=>b.classList.toggle('active', b.dataset.target===e.target.id)); } });
+  }, { rootMargin:'-40% 0px -40% 0px' });
+  spySections.forEach(s=>s && spy.observe(s));
+
+  document.getElementById('burgerBtn').addEventListener('click', ()=> document.getElementById('mobileMenu').classList.toggle('open'));
+
+  const revealObs = new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+  }, { threshold:0.12 });
+  document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+  const countObs = new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const el = e.target, target = parseInt(el.dataset.target,10);
+        let cur = 0; const step = Math.max(1, Math.round(target/40));
+        const t = setInterval(()=>{ cur += step; if(cur>=target){cur=target; clearInterval(t);} el.textContent = cur; }, 22);
+        countObs.unobserve(el);
+      }
+    });
+  }, { threshold:0.5 });
+  document.querySelectorAll('.count').forEach(c=>countObs.observe(c));
+
+  document.querySelectorAll('.fitem').forEach(item=>{
+    item.querySelector('.fq').addEventListener('click', ()=> item.classList.toggle('open'));
+  });
+  document.querySelectorAll('.faqitem').forEach(item=>{
+    item.querySelector('.faqq').addEventListener('click', ()=>{
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faqitem').forEach(i=>i.classList.remove('open'));
+      if(!isOpen) item.classList.add('open');
+    });
+  });
+
+  const track = document.getElementById('slideTrack');
+  const slides = track.children; const dotsWrap = document.getElementById('dots');
+  const slideImg = document.getElementById('slideImg');
+  const slideImages = [
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Vietnam_Youth_Football_Training_Center_2022.jpg",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Qingdao_Youth_Football_Stadium.jpg",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Young_soccer_player.jpg",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/Estadio_Santiago_Bernabeu_(53988637843).jpg",
+    "https://commons.wikimedia.org/wiki/Special:FilePath/People_Playing_football.jpg"
+  ];
+  let current = 0;
+  for(let i=0;i<slides.length;i++){
+    slides[i].style.display = i===0 ? 'block' : 'none';
+    const d = document.createElement('div'); d.className = 'dot' + (i===0?' active':'');
+    d.addEventListener('click', ()=> goTo(i)); dotsWrap.appendChild(d);
+  }
+  function goTo(i){
+    current = (i+slides.length)%slides.length;
+    for(let j=0;j<slides.length;j++){ slides[j].style.display = j===current ? 'block' : 'none'; }
+    slideImg.src = slideImages[current];
+    [...dotsWrap.children].forEach((d,idx)=> d.classList.toggle('active', idx===current));
+  }
+  document.getElementById('nextSlide').addEventListener('click', ()=> goTo(current+1));
+  document.getElementById('prevSlide').addEventListener('click', ()=> goTo(current-1));
+
+  const tips = [
+    "Practica el nordic curl dos veces por semana: baja casi a la mitad el riesgo de lesión.",
+    "Antes de dormir, imagina una jugada que quieras mejorar.",
+    "Toma entre 400 y 600 ml de agua dos horas antes de jugar.",
+    "Practica un gesto técnico con tu pierna mala por 10 minutos.",
+    "Si dormiste mal, una siesta de 30 a 40 minutos antes de las 4pm ayuda.",
+    "Antes de un partido importante, respira lento un minuto en vez de pensar en el resultado.",
+    "Mejor entrenar poco todos los días que mucho un solo día.",
+    "Jugar con las dos piernas te hace más difícil de marcar."
+  ];
+  let tipIndex = Math.floor(Math.random()*tips.length);
+  function showTip(){ document.getElementById('tipText').textContent = tips[tipIndex]; }
+  showTip();
+  document.getElementById('newTip').addEventListener('click', ()=>{ tipIndex = (tipIndex+1)%tips.length; showTip(); });
+
+  const questions = [
+    { q:"¿Cuántas veces a la semana entrenas fuerza, además de correr y jugar?", opts:[
+      {t:"Nunca o casi nunca", cat:"fisico", v:2}, {t:"A veces", cat:"fisico", v:1}, {t:"Casi siempre", cat:"fisico", v:0}] },
+    { q:"¿Practicas algún aspecto técnico (pase, control, tiro) fuera del entrenamiento del equipo?", opts:[
+      {t:"Casi nunca", cat:"tecnica", v:2}, {t:"A veces", cat:"tecnica", v:1}, {t:"Sí, seguido", cat:"tecnica", v:0}] },
+    { q:"Antes de un partido importante, ¿qué rutina haces?", opts:[
+      {t:"Me cuesta mucho", cat:"mental", v:2}, {t:"Más o menos", cat:"mental", v:1}, {t:"Los controlo bien", cat:"mental", v:0}] },
+    { q:"¿Comes comida chatarra seguido?", opts:[
+      {t:"Sí, seguido", cat:"comida", v:2}, {t:"A veces", cat:"comida", v:1}, {t:"Casi nunca", cat:"comida", v:0}] },
+    { q:"¿Cuántas horas duermes en promedio?", opts:[
+      {t:"Menos de 6", cat:"descanso", v:2}, {t:"Entre 6 y 8", cat:"descanso", v:1}, {t:"Más de 8", cat:"descanso", v:0}] },
+    { q:"Cuando se te baja la motivación, ¿qué haces?", opts:[
+      {t:"Se me hace muy difícil", cat:"disciplina", v:2}, {t:"A veces sí, a veces no", cat:"disciplina", v:1}, {t:"Sigo igual", cat:"disciplina", v:0}] },
+  ];
+  const results = {
+    fisico:{icon:"💪", title:"Trabaja más el físico", text:"Suma trabajo de fuerza y cuidado de lesiones a tu rutina."},
+    tecnica:{icon:"⚽", title:"Trabaja más la técnica", text:"Repetir un solo gesto técnico todos los días ayuda más que hacer de todo un poco."},
+    mental:{icon:"🧠", title:"Trabaja más la mente", text:"Los nervios se controlan practicando respiración y visualización."},
+    comida:{icon:"🥗", title:"Trabaja más la comida", text:"No hace falta nada complicado: carbohidrato + proteína + fruta o verdura."},
+    descanso:{icon:"😴", title:"Trabaja más el descanso", text:"Dormir menos de 8 horas se relaciona con más lesiones."},
+    disciplina:{icon:"🔥", title:"Trabaja más la disciplina", text:"A todos se les baja la motivación. Lo que marca la diferencia es seguir la rutina en los días difíciles."}
+  };
+  let qIndex = 0; const scores = {fisico:0,tecnica:0,mental:0,comida:0,descanso:0,disciplina:0};
+  function renderQuestion(){
+    const q = questions[qIndex];
+    document.getElementById('qbarFill').style.width = ((qIndex)/questions.length*100)+'%';
+    document.getElementById('qtext').textContent = q.q;
+    const opts = document.getElementById('qopts'); opts.innerHTML = '';
+    q.opts.forEach(o=>{
+      const b = document.createElement('button'); b.className='qopt'; b.textContent = o.t;
+      b.addEventListener('click', ()=>{ scores[o.cat]+=o.v; qIndex++; if(qIndex<questions.length){ renderQuestion(); } else { showResult(); } });
+      opts.appendChild(b);
+    });
+  }
+  function showResult(){
+    document.getElementById('qbarFill').style.width = '100%';
+    document.getElementById('quizQuestion').style.display = 'none';
+    let top = 'fisico', max = -1;
+    for(const k in scores){ if(scores[k] > max){ max = scores[k]; top = k; } }
+    const r = results[top];
+    document.getElementById('qResultIcon').textContent = r.icon;
+    document.getElementById('qResultTitle').textContent = r.title;
+    document.getElementById('qResultText').textContent = r.text;
+    document.getElementById('qresult').classList.add('show');
+  }
+  document.getElementById('qRetry').addEventListener('click', ()=>{
+    qIndex = 0; for(const k in scores) scores[k]=0;
+    document.getElementById('qresult').classList.remove('show');
+    document.getElementById('quizQuestion').style.display = 'block';
+    renderQuestion();
+  });
+  renderQuestion();
+
+  document.querySelectorAll('.satbtn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.satbtn').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');
+    });
+  });
+  document.getElementById('fbForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    document.getElementById('fbForm').style.display = 'none';
+    document.getElementById('fbThanks').classList.add('show');
+  });
+</script>
+</body>
+</html>
